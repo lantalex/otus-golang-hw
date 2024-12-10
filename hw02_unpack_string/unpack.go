@@ -6,7 +6,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/rivo/uniseg"
+	"github.com/rivo/uniseg" //nolint:depguard
 )
 
 var ErrInvalidString = errors.New("invalid string")
