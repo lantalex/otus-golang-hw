@@ -25,6 +25,7 @@ func Unpack(str string) (string, error) {
 		beg, end := gr.Positions()
 		next := str[beg:end]
 
+		// backslash case
 		if next == `\` {
 			if backslash {
 				chunk = str[beg:end]
@@ -37,17 +38,27 @@ func Unpack(str string) (string, error) {
 			continue
 		}
 
-		if digitValue, err := strconv.Atoi(next); err == nil && !backslash {
-			if chunk == "" {
-				return "", ErrInvalidString
-			}
+		// digit case
+		if digitValue, err := strconv.Atoi(next); err == nil {
+			if backslash {
+				res.WriteString(chunk)
+				chunk = str[beg:end]
+				backslash = false
+			} else {
+				if chunk == "" {
+					return "", ErrInvalidString
+				}
 
-			res.WriteString(strings.Repeat(chunk, digitValue))
-			chunk = ""
-			backslash = false
+				res.WriteString(strings.Repeat(chunk, digitValue))
+				chunk = ""
+			}
 			continue
 		}
 
+		// regular symbol case
+		if backslash {
+			return "", ErrInvalidString
+		}
 		res.WriteString(chunk)
 		chunk = str[beg:end]
 		backslash = false
