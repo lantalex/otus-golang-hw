@@ -1,13 +1,15 @@
 package hw03frequencyanalysis
 
 import (
+	"strconv"
+	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/require" //nolint:depguard
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+var taskWithAsteriskIsCompleted = true
 
 var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
@@ -48,7 +50,7 @@ func TestTop10(t *testing.T) {
 		require.Len(t, Top10(""), 0)
 	})
 
-	t.Run("positive test", func(t *testing.T) {
+	t.Run("positive test#1", func(t *testing.T) {
 		if taskWithAsteriskIsCompleted {
 			expected := []string{
 				"а",         // 8
@@ -78,5 +80,61 @@ func TestTop10(t *testing.T) {
 			}
 			require.Equal(t, expected, Top10(text))
 		}
+	})
+
+	t.Run("positive test#2", func(t *testing.T) {
+		expected := []string{
+			"and",
+			"one",
+			"cat",
+			"cats",
+			"dog",
+			"dog,two",
+			"man",
+		}
+		require.Equal(t, expected, Top10("cat and dog, one dog,two cats and one man"))
+	})
+
+	t.Run("positive test#3", func(t *testing.T) {
+		expected := []string{
+			"-----",
+			"нога",
+			"слова",
+			"это",
+			"и",
+			"одинаковые",
+			"разные",
+			"dog,cat",
+			"dog...cat",
+			"dogcat",
+		}
+		require.Equal(t, expected, Top10(`
+			Нога и нога - это одинаковые слова, нога!, нога, нога, и нога - это одинаковые слова;
+    		какой-то и какойто - это разные слова.
+    		dog,cat, dog...cat, dogcat - разные слова
+    		------- ------- ------- ------- ------- ------- ------- - - - - - - - - - - - - - -  это слово
+    		- словом не является
+		`))
+	})
+
+	t.Run("positive test#4", func(t *testing.T) {
+		var sb strings.Builder
+		for i := 0; i < 100; i++ {
+			sb.WriteString(strconv.Itoa(i%9) + ", ")
+		}
+
+		expected := []string{
+			"0",
+			"1",
+			"2",
+			"3",
+			"4",
+			"5",
+			"6",
+			"7",
+			"8",
+		}
+
+		require.Equal(t, expected, Top10(sb.String()))
 	})
 }
