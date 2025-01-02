@@ -22,10 +22,6 @@ func Run(tasks []Task, n, m int) error {
 	}
 
 	for _, task := range tasks {
-		if atomic.LoadInt64(&allowedErrors) <= 0 {
-			break
-		}
-
 		ch <- task
 	}
 	close(ch)
@@ -44,7 +40,7 @@ func processTasks(ch <-chan Task, allowedErrors *int64, wg *sync.WaitGroup) {
 
 	for task := range ch {
 		if atomic.LoadInt64(allowedErrors) <= 0 {
-			return
+			continue
 		}
 
 		if err := task(); err != nil {
