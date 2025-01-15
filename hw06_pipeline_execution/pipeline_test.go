@@ -62,7 +62,7 @@ func TestPipeline(t *testing.T) {
 			int64(sleepPerStage)*int64(len(stages)+len(data)-1)+int64(fault))
 	})
 
-	t.Run("termination case", func(t *testing.T) {
+	t.Run("done case", func(t *testing.T) {
 		in := make(Bi)
 		done := make(Bi)
 		data := []int{1, 2, 3, 4, 5}
