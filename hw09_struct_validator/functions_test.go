@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/assert" //nolint:depguard
 )
 
 func TestCheckLen(t *testing.T) {
@@ -77,7 +77,6 @@ func TestCheckMin(t *testing.T) {
 }
 
 func TestCheckMax(t *testing.T) {
-
 	valid, err := checkMax(3, "5")
 	assert.NoError(t, err)
 	assert.True(t, valid)

@@ -2,6 +2,7 @@ package hw09structvalidator
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -26,7 +27,6 @@ func checkLen(value string, args string) (valid bool, err error) {
 }
 
 func checkRegexp(value string, args string) (valid bool, err error) {
-
 	r, err := regexp.Compile(args)
 	if err != nil {
 		return false, err
@@ -38,13 +38,16 @@ func checkRegexp(value string, args string) (valid bool, err error) {
 func checkIn(value reflect.Value, args string) (valid bool, err error) {
 	var str string
 
-	switch value.Kind() {
-	case reflect.String:
-		str = value.String()
-	case reflect.Int:
-		str = strconv.FormatInt(value.Int(), 10)
-	default:
+	if value.Kind() != reflect.String && value.Kind() != reflect.Slice {
 		return false, fmt.Errorf("is not a string/int")
+	}
+
+	if value.Kind() == reflect.String {
+		str = value.String()
+	}
+
+	if value.Kind() == reflect.Int {
+		str = strconv.FormatInt(value.Int(), 10)
 	}
 
 	for _, item := range strings.Split(args, ",") {
@@ -80,4 +83,8 @@ func checkMax(value int, args string) (valid bool, err error) {
 	}
 
 	return true, nil
+}
+
+func checkNotNan(value float64, _ string) (valid bool, err error) {
+	return !math.IsNaN(value), nil
 }

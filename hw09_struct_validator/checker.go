@@ -17,7 +17,7 @@ func (c *ReflectChecker) Check(v reflect.Value, args string) (bool, error) {
 	return c.function(v, args)
 }
 
-type FunctionChecker[T string | int] struct {
+type FunctionChecker[T string | int | float64] struct {
 	function func(T, string) (bool, error)
 }
 
