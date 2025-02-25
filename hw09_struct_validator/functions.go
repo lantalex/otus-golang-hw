@@ -38,7 +38,7 @@ func checkRegexp(value string, args string) (valid bool, err error) {
 func checkIn(value reflect.Value, args string) (valid bool, err error) {
 	var str string
 
-	if value.Kind() != reflect.String && value.Kind() != reflect.Slice {
+	if value.Kind() != reflect.String && value.Kind() != reflect.Int {
 		return false, fmt.Errorf("is not a string/int")
 	}
 
